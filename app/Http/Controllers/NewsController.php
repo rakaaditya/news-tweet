@@ -5,9 +5,12 @@ use App\Http\Controllers\Controller as Base;
 use App\Http\Controllers\TwitterController as Twitter;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Cache;
 
 class NewsController extends Base
 {
+    const KEY = 'newstweet:news:';
+
     function __construct()
     {
         $this->twitter = new Twitter();
@@ -15,29 +18,36 @@ class NewsController extends Base
 
     public function index(Request $request, $screen_name = 'liputan6dotcom')
     {
-        $data = $this->twitter->client()->get('statuses/user_timeline.json', [
-            'query' => [
-                'screen_name'       => $screen_name,
-                'count'             => $request->input('count') ? $request->input('count') : 5,
-                'since_id'          => $request->input('since_id') ? $request->input('since_id') : null,
-                'max_id'            => $request->input('max_id') ? $request->input('max_id') : null,
-                'exclude_replies'   => true
-            ]
-        ])->getBody();
-
-        $data = json_decode($data);
-
-        $articles = [];
-
-        foreach($data as $row) {
-            $articles[] = $this->ogParse($row);
-        }
-
-        $result = [
-            'screen_name'   => $screen_name,
-            'count'         => $request->input('count') ? $request->input('count') : 5,
-            'data'          => $articles
+        $query = [
+            'screen_name'       => $screen_name,
+            'count'             => $request->input('count') ? $request->input('count') : 5,
+            'since_id'          => $request->input('since_id') ? $request->input('since_id') : null,
+            'max_id'            => $request->input('max_id') ? $request->input('max_id') : null,
+            'exclude_replies'   => true
         ];
+
+        $key = self::KEY.$query['screen_name'].':'.$query['count'].':'.$query['since_id'].':'.$query['max_id'];
+
+        if(! $result = Cache::get($key) ) {
+            $data = $this->twitter->client()->get('statuses/user_timeline.json', [
+                'query' => $query
+            ])->getBody();
+
+            $data = json_decode($data);
+
+            $articles = [];
+
+            foreach($data as $row) {
+                $articles[] = $this->ogParse($row);
+            }
+
+            $result = [
+                'screen_name'   => $screen_name,
+                'count'         => $request->input('count') ? $request->input('count') : 5,
+                'data'          => $articles
+            ];
+            Cache::put($key, $result, 10);
+        }
 
         return response()->json($result)
                  ->setCallback($request->input('callback'));
