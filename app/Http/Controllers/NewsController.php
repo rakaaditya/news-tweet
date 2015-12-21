@@ -75,6 +75,7 @@ class NewsController extends Base
             'title'         => $ogTitleTag->attributes->getNamedItem('content')->nodeValue,
             'image'         => $ogImageTag->attributes->getNamedItem('content')->nodeValue,
             'description'   => $ogDescriptionTag->attributes->getNamedItem('content')->nodeValue,
+            'url'           => $url,
             'retweet'       => $data->retweet_count,
             'favorite'      => $data->favorite_count,
 
