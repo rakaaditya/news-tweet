@@ -15,6 +15,6 @@ $app->get('/', function () use ($app) {
     return $app->welcome();
 });
 
-$app->group(['prefix' => '1.1'], function ($app) {
+$app->group(['prefix' => 'v1'], function ($app) {
     $app->get('news/{screen_name}', ['uses' => 'App\Http\Controllers\NewsController@index']);
 });
