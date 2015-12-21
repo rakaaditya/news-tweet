@@ -37,9 +37,9 @@ class NewsController extends Base
 
             $articles = [];
 
-            foreach($data as $row) {
-                $articles[] = $this->ogParse($row);
-            }
+            foreach($data as $row)
+                if($row->entities->urls[0]->expanded_url)
+                    $articles[] = $this->ogParse($row);
 
             $result = [
                 'screen_name'   => $screen_name,
@@ -61,7 +61,7 @@ class NewsController extends Base
 
         // In case URL using short URL
         $url = $this->shortUrlParse($url);
-        
+
         $doc                = new \DOMDocument();
         $doc->loadHTMLFile($url);
         $xpath              = new \DOMXpath($doc);
@@ -84,7 +84,7 @@ class NewsController extends Base
         return $result;
     }
 
-    protected function shortUrlParse($url)
+    private function shortUrlParse($url)
     {
         $client = new Client(['base_uri' => $url]);
 
