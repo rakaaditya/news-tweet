@@ -23,7 +23,8 @@ class NewsController extends Base
             'count'             => $request->input('count') ? $request->input('count') : 5,
             'since_id'          => $request->input('since_id') ? $request->input('since_id') : null,
             'max_id'            => $request->input('max_id') ? $request->input('max_id') : null,
-            'exclude_replies'   => true
+            'exclude_replies'   => true,
+            'include_rts'       => false
         ];
 
         $key = self::KEY.$query['screen_name'].':'.$query['count'].':'.$query['since_id'].':'.$query['max_id'];
