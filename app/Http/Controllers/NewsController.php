@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class NewsController extends Base
 {
 
-    public function index(Request $request, $screenName = 'liputan6dotcom')
+    public function index(Request $request, $screenName)
     {   
         $articles = Twitter::screenName($screenName)
                         ->count($request->input('count'))
