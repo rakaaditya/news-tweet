@@ -16,5 +16,6 @@ $app->get('/', function () use ($app) {
 });
 
 $app->group(['prefix' => 'v1'], function ($app) {
-    $app->get('news/{screen_name}', ['uses' => 'App\Http\Controllers\NewsController@index']);
+    $app->get('news/{screen_name}', ['uses' => 'App\Http\Controllers\NewsController@byScreenName']);
+    $app->get('news/category/{category}', ['uses' => 'App\Http\Controllers\NewsController@byCategory']);
 });

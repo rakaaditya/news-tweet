@@ -13,7 +13,7 @@ class TwitterController extends Base
     const KEY = 'newstweet:news:';
 
     private static  $screenName = 'cnnindonesia',
-                    $count = 5,
+                    $count = 15,
                     $sinceId = null,
                     $maxId = null,
                     $excludeReplies = true,
@@ -92,7 +92,7 @@ class TwitterController extends Base
             ])->getBody();
 
             $data = json_decode($data);
-
+            echo '<pre>'; print_r($data); die('dafuq');
             $articles = [];
 
             foreach($data as $row)
@@ -124,6 +124,7 @@ class TwitterController extends Base
         
         $result = [
             'tweet_id'      => $data->id,
+            'screen_name'   => $data->user->screen_name,
             'title'         => $ogTitleTag->attributes->getNamedItem('content')->nodeValue,
             'image'         => $ogImageTag->attributes->getNamedItem('content')->nodeValue,
             'description'   => $ogDescriptionTag->attributes->getNamedItem('content')->nodeValue,
