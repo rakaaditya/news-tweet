@@ -92,7 +92,7 @@ class TwitterController extends Base
             ])->getBody();
 
             $data = json_decode($data);
-            echo '<pre>'; print_r($data); die('dafuq');
+            
             $articles = [];
 
             foreach($data as $row)

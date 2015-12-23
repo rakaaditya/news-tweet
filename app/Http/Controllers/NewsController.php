@@ -13,9 +13,9 @@ class NewsController extends Base
     {
         $screenName     = [
             'sport' => [
-                // 'detiksport',
+                'detiksport',
                 'KompasBola',
-                // 'Lip6Sport'
+                'Lip6Sport'
             ],
             'tech' => [
                 'detikinet',
